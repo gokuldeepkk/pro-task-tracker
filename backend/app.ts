@@ -6,7 +6,7 @@ import { DatabaseService } from "./services/common/databaseService";
 import * as dotenv from "dotenv";
 import * as path from "path";
 
-dotenv.config({ path: path.resolve(__dirname, "secrets", ".env") });
+dotenv.config({ path: path.resolve(__dirname, ".env") });
 
 // --- Configuration Constants ---
 const PORT = 3000;
