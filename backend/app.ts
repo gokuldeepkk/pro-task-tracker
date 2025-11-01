@@ -1,15 +1,15 @@
-// index.ts
-
 import "reflect-metadata"; // Must be imported once in your application entry point
 
 import { createExpressServer } from "routing-controllers";
 import { Container } from "typedi";
 import { DatabaseService } from "./services/common/databaseService";
+import * as dotenv from "dotenv";
+import * as path from "path";
+
+dotenv.config({ path: path.resolve(__dirname, "secrets", ".env") });
 
 // --- Configuration Constants ---
 const PORT = 3000;
-const DB_URL =
-  "mongodb+srv://gokuldeep:EBFEVzawsGSFUNSW@cluster0.dutsujl.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
 async function bootstrap() {
   console.log("🔧 Setting up dependency injection container");

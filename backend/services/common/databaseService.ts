@@ -3,13 +3,13 @@ import { Service } from "typedi";
 
 @Service()
 export class DatabaseService {
-  private readonly DB_URL: string =
-    "mongodb+srv://gokuldeep:EBFEVzawsGSFUNSW@cluster0.dutsujl.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
   private connection: mongoose.Connection | null = null;
 
   private async connect(): Promise<mongoose.Connection> {
     try {
-      this.connection = await mongoose.createConnection(this.DB_URL);
+      this.connection = await mongoose.createConnection(
+        this.formDatabaseConnectionString()
+      );
       return this.connection;
     } catch (error) {
       console.error("Database connection error:", error);
@@ -22,5 +22,18 @@ export class DatabaseService {
       this.connection = await this.connect();
     }
     return this.connection as mongoose.Connection;
+  }
+
+  private formDatabaseConnectionString(): string {
+    return (
+      "mongodb+srv://" +
+      process.env.DB_USER +
+      ":" +
+      process.env.DB_PASSWORD +
+      "@" +
+      process.env.DB_HOST +
+      "/?retryWrites=true&w=majority&appName=" +
+      process.env.DB_NAME
+    );
   }
 }
