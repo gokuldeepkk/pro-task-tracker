@@ -1,4 +1,4 @@
-import { Response, ResponseStatus } from "../models/Response";
+import { Response, ResponseStatus } from "../src/dto/Response";
 import { Service } from "typedi";
 
 @Service()

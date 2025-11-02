@@ -13,10 +13,10 @@
     "moduleResolution": "node",
     "baseUrl": "./",
     "paths": {
-      "@controllers/*": ["controllers/*"],
-      "@models/*": ["models/*"],
-      "@services/*": ["services/*"],
-      "@gateways/*": ["gateways/*"]
+      "@controllers/*": ["src/controllers/*"],
+      "@models/*": ["src/models/*"],
+      "@services/*": ["src/services/*"],
+      "@gateways/*": ["src/gateways/*"]
     },
 
     "noUncheckedIndexedAccess": true,

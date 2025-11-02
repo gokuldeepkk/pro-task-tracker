@@ -2,7 +2,7 @@ import "reflect-metadata"; // Must be imported once in your application entry po
 
 import { createExpressServer } from "routing-controllers";
 import { Container } from "typedi";
-import { DatabaseService } from "./services/common/databaseService";
+import { DatabaseService } from "src/services/common/databaseService";
 import * as dotenv from "dotenv";
 import * as path from "path";
 

@@ -15,11 +15,18 @@ export class DBGateway {
     this.dbConnection = connection;
   }
 
-  async readDocument(tableName: string, query: object) {
+  async readDocument(tableName: string, query: object, projection?: object) {
     if (!this.dbConnection) {
       await this.setupConnection();
     }
     const collection = this.dbConnection!.collection(tableName);
+    const options: any = {};
+    if (projection) {
+      options.projection = projection;
+    }
+    if (Object.keys(options).length > 0) {
+      return collection.find(query, options).toArray();
+    }
     return collection.find(query).toArray();
   }
 
