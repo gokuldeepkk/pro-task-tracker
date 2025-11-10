@@ -1,35 +1,32 @@
 import Container, { Service } from "typedi";
-import { BaseService } from "./common/baseService";
-import { CreateUserRequest, LoginRequest } from "src/dto/User";
-import { DBGateway } from "src/gateways/dbGateway";
-import { COLLECTION } from "../utils/constants/database";
+import { CreateUserRequest, LoginRequest } from "src/dto/User.dto";
+import { UserRepository } from "src/repositories/userRepository";
+import { LoggerService } from "./common/loggerService";
+import { ResponseUtil } from "src/utils/responseUtil";
 
 @Service()
-export class UserService extends BaseService {
-  private readonly dbGateway: DBGateway;
+export class UserService {
+  private readonly userRepository: UserRepository;
 
-  constructor() {
-    super();
-    this.dbGateway = Container.get<DBGateway>(DBGateway);
+  constructor(private logger: LoggerService, private response: ResponseUtil) {
+    this.userRepository = Container.get<UserRepository>(UserRepository);
   }
 
   // User service methods will go here
   async createUser(data: CreateUserRequest) {
-    this.logger.info("Creating user...");
-    await this.dbGateway.insertDocument(COLLECTION.users, data);
-    return this.response.success({ message: "User created", data });
+    try {
+      const user = await this.userRepository.save(data);
+      this.logger.info("User created successfully");
+      return this.response.success({ message: "User created", data: user });
+    } catch (error) {
+      this.logger.error("Error creating user", error);
+      return this.response.error("Error creating user");
+    }
   }
 
   async loginUser(data: LoginRequest) {
     this.logger.info("Logging in user...");
-    const user = await this.dbGateway.readDocument(
-      COLLECTION.users,
-      {
-        email: data.email,
-        password: data.password,
-      },
-      { password: 0 }
-    );
+    const user = {};
     if (!user) {
       return this.response.error("Invalid email or password");
     }

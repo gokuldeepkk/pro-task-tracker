@@ -1,10 +1,12 @@
 import "reflect-metadata"; // Must be imported once in your application entry point
 
-import { createExpressServer } from "routing-controllers";
+import { createExpressServer, useExpressServer } from "routing-controllers";
+import * as express from "express";
 import { Container } from "typedi";
 import { DatabaseService } from "src/services/common/databaseService";
 import * as dotenv from "dotenv";
 import * as path from "path";
+import { API_VERSION } from "src/utils/constants/routes";
 
 dotenv.config({ path: path.resolve(__dirname, ".env") });
 
@@ -12,8 +14,6 @@ dotenv.config({ path: path.resolve(__dirname, ".env") });
 const PORT = 3000;
 
 async function bootstrap() {
-  console.log("🔧 Setting up dependency injection container");
-  (createExpressServer as any).container = Container;
   console.log("⏳ Attempting to connect to MongoDB...");
   try {
     const dbService = Container.get<DatabaseService>(DatabaseService);
@@ -25,12 +25,17 @@ async function bootstrap() {
   }
 
   console.log("✅ Creating Express server with routing-controllers");
-  const app = createExpressServer({
-    controllers: [__dirname + "/controllers/*.ts"],
+  const app = express();
+  app.use(express.json());
+  useExpressServer(app, {
+    controllers: [__dirname + "/src/controllers/*.ts"],
+    middlewares: [__dirname + "/src/middlewares/*.ts"],
+    container: Container,
     defaultErrorHandler: false,
     classTransformer: true,
     validation: true,
-  });
+    routePrefix: API_VERSION,
+  } as any);
 
   app.listen(PORT, () => {
     console.log(`🚀 App is running on http://localhost:${PORT}`);
