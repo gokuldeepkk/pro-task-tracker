@@ -15,9 +15,10 @@ export class UserService {
   // User service methods will go here
   async createUser(data: CreateUserRequest) {
     try {
+      this.logger.info("Creating user...");
       const user = await this.userRepository.save(data);
       this.logger.info("User created successfully");
-      return this.response.success({ message: "User created", data: user });
+      return this.response.success(user);
     } catch (error) {
       this.logger.error("Error creating user", error);
       return this.response.error("Error creating user");
@@ -31,5 +32,11 @@ export class UserService {
       return this.response.error("Invalid email or password");
     }
     return this.response.success({ message: "Login successful", data: user });
+  }
+
+  async getUserByEmail(email: string) {
+    this.logger.info(`Fetching user by email: ${email}`);
+    const user = await this.userRepository.findByEmail(email);
+    return this.response.success(user);
   }
 }

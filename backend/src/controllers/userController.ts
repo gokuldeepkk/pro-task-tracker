@@ -1,24 +1,40 @@
-import { Body, Get, JsonController, Post } from "routing-controllers";
+import {
+  Body,
+  Get,
+  HeaderParam,
+  JsonController,
+  Post,
+} from "routing-controllers";
 import { UserService } from "@services/userService";
 import Container from "typedi";
-import { CreateUserRequest, LoginRequest } from "src/dto/User.dto";
 import { ResponseUtil } from "../utils/responseUtil";
 import { BASE_ROUTES, MODULES } from "src/utils/constants/routes";
 
 @JsonController(BASE_ROUTES.secure + MODULES.users)
 export class UserController {
+  constructor(
+    private userService: UserService,
+    private responseUtil: ResponseUtil
+  ) {
+    this.userService = Container.get(UserService);
+    this.responseUtil = Container.get(ResponseUtil);
+  }
+
   @Get("/")
   async getAllUsers() {
-    const userService = Container.get(UserService);
-    const responseUtil = Container.get(ResponseUtil);
     try {
       // const users = await userService.getAllUsers();
-      return responseUtil.success({
+      return this.responseUtil.success({
         message: "Fetched users successfully",
         data: [],
       });
     } catch (error) {
-      return responseUtil.error(error);
+      return this.responseUtil.error(error);
     }
+  }
+
+  @Get("/email")
+  async getUserByEmail(@HeaderParam("email") email: string) {
+    return await this.userService.getUserByEmail(email);
   }
 }

@@ -10,7 +10,7 @@ export class CreateUserRequest {
   @IsNotEmpty() name!: string;
   @IsNotEmpty() @IsEmail() email!: string;
   @IsNotEmpty() password!: string;
-  @IsOptional() @IsIn(["user", "admin"]) userPermission?: "user" | "admin";
+  @IsOptional() @IsIn(["user", "admin"]) permission?: "user" | "admin";
 }
 
 export class LoginRequest {

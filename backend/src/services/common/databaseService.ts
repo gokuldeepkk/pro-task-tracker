@@ -8,7 +8,13 @@ export class DatabaseService {
   private async connect(): Promise<mongoose.Connection> {
     try {
       this.connection = await mongoose.createConnection(
-        this.formDatabaseConnectionString()
+        this.formDatabaseConnectionString(),
+        {
+          serverSelectionTimeoutMS: 15000,
+          socketTimeoutMS: 45000,
+          bufferCommands: true,
+          maxPoolSize: 10,
+        }
       );
       return this.connection;
     } catch (error) {
@@ -25,15 +31,22 @@ export class DatabaseService {
   }
 
   private formDatabaseConnectionString(): string {
-    return (
+    const connString =
       "mongodb+srv://" +
       process.env.DB_USER +
       ":" +
       process.env.DB_PASSWORD +
       "@" +
       process.env.DB_HOST +
-      "/?retryWrites=true&w=majority&appName=" +
-      process.env.DB_NAME
+      "/" +
+      process.env.DB_NAME +
+      "?retryWrites=true&w=majority&appName=" +
+      process.env.DB_NAME;
+
+    console.log(
+      "📌 MongoDB Connection String:",
+      connString.replace(process.env.DB_PASSWORD || "", "***")
     );
+    return connString;
   }
 }

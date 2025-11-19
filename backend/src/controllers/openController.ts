@@ -56,6 +56,7 @@ export class OpenController {
   @Post(PUBLIC_ROUTES.register)
   async createUser(@Body({ required: true }) payload: CreateUserRequest) {
     try {
+      console.log("Creating user with payload:", payload);
       return await this.userService.createUser(payload);
     } catch (error) {
       return this.responseUtil.error(error);

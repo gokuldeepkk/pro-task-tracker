@@ -1,22 +1,39 @@
-import * as mongoose from "mongoose";
+import { Document, Schema, Connection, Types } from "mongoose";
 import * as bcrypt from "bcrypt";
 
 const SALT_WORK_FACTOR = 10;
 
-export interface IUser extends mongoose.Document {
+export interface IUser extends Document {
   name: string;
   email: string;
   password: string;
-  userPermission?: "user" | "admin";
+  permission?: "user" | "admin";
   comparePassword(candidatePassword: string): Promise<boolean>;
 }
 
-const UserSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-  age: { type: Number, required: false },
-  userPermission: { type: String, enum: ["user", "admin"], default: "user" },
+const UserSchema = new Schema(
+  {
+    name: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
+    age: { type: Number, required: false },
+    permission: { type: String, enum: ["user", "admin"], default: "user" },
+  },
+  {
+    toJSON: {
+      virtuals: true,
+      transform: function (doc, ret) {
+        if (ret?._id) delete (ret as any)._id;
+        if (ret?.__v) delete (ret as any).__v;
+        if (ret?.password) delete (ret as any).password;
+        return ret;
+      },
+    },
+  }
+);
+
+UserSchema.virtual("id").get(function (this: IUser) {
+  return (this._id as Types.ObjectId).toHexString();
 });
 
 UserSchema.pre<IUser>("save", async function (next) {
@@ -42,5 +59,7 @@ UserSchema.methods.comparePassword = function (
   return bcrypt.compare(candidatePassword, this.password);
 };
 
-// Export the Mongoose Model
-export const UserModel = mongoose.model<IUser>("User", UserSchema);
+// Export a function to create the model with a specific connection
+export function createUserModel(connection: Connection) {
+  return connection.model<IUser>("User", UserSchema);
+}

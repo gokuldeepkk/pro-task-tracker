@@ -1,0 +1,39 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Attach to Backend Debug (nodemon)",
+      "type": "node",
+      "request": "attach",
+      "port": 9229, // Default Node inspection port
+      "skipFiles": ["<node_internals>/**"],
+
+      // 1. Point to the directory containing package.json for resolving node modules
+      "cwd": "${workspaceFolder}/backend",
+
+      // 2. Enable Source Maps for TypeScript debugging
+      "sourceMaps": true,
+
+      // 3. Optional: Define the root of the source files.
+      //    This helps VS Code map the running JS back to your TS files.
+      //    If your tsconfig.json is configured to output JS to a 'dist' folder,
+      //    you would point outFiles to that location (e.g., "${workspaceFolder}/backend/dist/**/*.js").
+      //    For ts-node (which runs in-memory), this is usually sufficient:
+      "outFiles": ["${workspaceFolder}/backend/**/*.js"]
+    },
+    {
+      // Optional: A configuration to launch AND debug the app in one go (without separate terminal command)
+      "name": "Launch Backend Debug (nodemon)",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "debug"],
+      // This tells the debugger where the `package.json` file is located
+      "cwd": "${workspaceFolder}/backend",
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"],
+      "sourceMaps": true,
+      "outFiles": ["${workspaceFolder}/backend/**/*.js"]
+    }
+  ]
+}
