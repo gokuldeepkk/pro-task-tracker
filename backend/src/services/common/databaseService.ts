@@ -43,10 +43,6 @@ export class DatabaseService {
       "?retryWrites=true&w=majority&appName=" +
       process.env.DB_NAME;
 
-    console.log(
-      "📌 MongoDB Connection String:",
-      connString.replace(process.env.DB_PASSWORD || "", "***")
-    );
     return connString;
   }
 }

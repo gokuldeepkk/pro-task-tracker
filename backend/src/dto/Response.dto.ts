@@ -2,7 +2,7 @@ export interface Response<T> {
   status: ResponseStatus;
   message?: string;
   data?: T;
-  code: number;
+  statusCode: number;
 }
 
 export enum ResponseStatus {

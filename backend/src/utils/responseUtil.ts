@@ -7,7 +7,7 @@ export class ResponseUtil {
     return {
       status: ResponseStatus.SUCCESS,
       data,
-      code,
+      statusCode: code,
     };
   }
 
@@ -15,7 +15,7 @@ export class ResponseUtil {
     const errorObject = {
       status: ResponseStatus.ERROR,
       message: "Internal Server Error",
-      code,
+      statusCode: code,
     };
     if (error instanceof Error) {
       errorObject.message = error.message;
