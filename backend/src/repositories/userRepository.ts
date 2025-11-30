@@ -28,6 +28,15 @@ export class UserRepository {
   public async findByEmail(email: string): Promise<IUser | null> {
     const UserModel = await this.ensureModel();
     const user = await UserModel.findOne({ email });
-    return JSON.parse(JSON.stringify(user?.toJSON())) || null;
+    return user;
+  }
+
+  public async comparePassword(
+    candidatePassword: string,
+    hashedPassword: string
+  ): Promise<boolean> {
+    const UserModel = await this.ensureModel();
+    const dummyUser = new UserModel({ password: hashedPassword });
+    return dummyUser.comparePassword(candidatePassword);
   }
 }

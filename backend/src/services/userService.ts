@@ -26,12 +26,18 @@ export class UserService {
   }
 
   async loginUser(data: LoginRequest) {
-    this.logger.info("Logging in user...");
-    const user = {};
+    const user = await this.userRepository.findByEmail(data.email);
     if (!user) {
       return this.response.error("Invalid email or password");
     }
-    return this.response.success({ message: "Login successful", data: user });
+    const validCred = await this.userRepository.comparePassword(
+      data.password,
+      user?.password ?? ""
+    );
+    if (!validCred) {
+      return this.response.error("Invalid email or password");
+    }
+    return this.response.success(JSON.parse(JSON.stringify(user.toJSON())));
   }
 
   async getUserByEmail(email: string) {
