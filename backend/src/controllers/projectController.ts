@@ -2,6 +2,7 @@ import { ProjectService } from "@services/projectService";
 import {
   Body,
   Controller,
+  Delete,
   Get,
   JsonController,
   Param,
@@ -43,6 +44,15 @@ export class ProjectController {
   async getProjectById(@Param("id") id: string) {
     try {
       return await this.projectService.getProjectById(id);
+    } catch (error) {
+      return this.responseUtil.error(error);
+    }
+  }
+
+  @Delete("/:id")
+  async deleteProject(@Param("id") id: string) {
+    try {
+      return await this.projectService.deleteProject(id);
     } catch (error) {
       return this.responseUtil.error(error);
     }

@@ -41,4 +41,18 @@ export class ProjectService {
       return this.responseUtil.error("Error fetching project");
     }
   }
+
+  async deleteProject(id: string) {
+    try {
+      const project = await this.projectRepository.findProjectById(id);
+      if (!project) {
+        return this.responseUtil.error("Project not found");
+      }
+      // Add deletion logic here if needed
+      const deletedProject = await this.projectRepository.deleteProjectById(id);
+      return this.responseUtil.success(deletedProject);
+    } catch (error) {
+      return this.responseUtil.error("Error deleting project");
+    }
+  }
 }

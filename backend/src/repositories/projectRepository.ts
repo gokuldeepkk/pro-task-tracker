@@ -31,6 +31,13 @@ export class ProjectRepository {
 
   async findProjectById(id: string): Promise<IProject | null> {
     const Project = await this.ensureModel();
-    return await Project.findById(id).exec();
+    const project = await Project.findById(id).exec();
+    return JSON.parse(JSON.stringify(project?.toJSON() || null));
+  }
+
+  async deleteProjectById(id: string): Promise<IProject | null> {
+    const Project = await this.ensureModel();
+    const deletedProject = await Project.findByIdAndDelete(id).exec();
+    return JSON.parse(JSON.stringify(deletedProject?.toJSON() || null));
   }
 }
