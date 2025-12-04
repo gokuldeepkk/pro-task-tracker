@@ -8,6 +8,7 @@ export const BASE_ROUTES = {
 export const MODULES = {
   users: "/users",
   tasks: "/tasks",
+  projects: "/projects",
 };
 
 export const PUBLIC_ROUTES = {

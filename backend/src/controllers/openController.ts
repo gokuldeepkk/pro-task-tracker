@@ -3,17 +3,15 @@ import { Body, Controller, Get, Header, Post } from "routing-controllers";
 import { CreateUserRequest, LoginRequest } from "src/dto/User.dto";
 import { BASE_ROUTES, PUBLIC_ROUTES } from "src/utils/constants/routes";
 import { ResponseUtil } from "src/utils/responseUtil";
-import Container from "typedi";
+import { Service } from "typedi";
 
+@Service()
 @Controller(BASE_ROUTES.public)
 export class OpenController {
   constructor(
     private userService: UserService,
     private responseUtil: ResponseUtil
-  ) {
-    this.userService = Container.get(UserService);
-    this.responseUtil = Container.get(ResponseUtil);
-  }
+  ) {}
 
   @Get("/")
   @Header("Content-Type", "text/html")

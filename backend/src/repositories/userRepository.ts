@@ -28,7 +28,7 @@ export class UserRepository {
   public async findByEmail(email: string): Promise<IUser | null> {
     const UserModel = await this.ensureModel();
     const user = await UserModel.findOne({ email });
-    return user;
+    return JSON.parse(JSON.stringify(user?.toJSON() || null));
   }
 
   public async comparePassword(

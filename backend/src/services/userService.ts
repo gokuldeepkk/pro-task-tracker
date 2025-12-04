@@ -6,11 +6,11 @@ import { ResponseUtil } from "src/utils/responseUtil";
 
 @Service()
 export class UserService {
-  private readonly userRepository: UserRepository;
-
-  constructor(private logger: LoggerService, private response: ResponseUtil) {
-    this.userRepository = Container.get<UserRepository>(UserRepository);
-  }
+  constructor(
+    private logger: LoggerService,
+    private response: ResponseUtil,
+    private userRepository: UserRepository
+  ) {}
 
   // User service methods will go here
   async createUser(data: CreateUserRequest) {

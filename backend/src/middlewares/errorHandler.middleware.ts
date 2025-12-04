@@ -2,7 +2,9 @@ import {
   ExpressErrorMiddlewareInterface,
   Middleware,
 } from "routing-controllers";
+import { Service } from "typedi";
 
+@Service()
 @Middleware({ type: "after" })
 export class ErrorHandlerMiddleware implements ExpressErrorMiddlewareInterface {
   error(error: any, req: any, res: any, next: (err?: any) => any): void {

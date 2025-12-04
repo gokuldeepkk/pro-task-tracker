@@ -6,19 +6,17 @@ import {
   Post,
 } from "routing-controllers";
 import { UserService } from "@services/userService";
-import Container from "typedi";
+import { Service } from "typedi";
 import { ResponseUtil } from "../utils/responseUtil";
 import { BASE_ROUTES, MODULES } from "src/utils/constants/routes";
 
+@Service()
 @JsonController(BASE_ROUTES.secure + MODULES.users)
 export class UserController {
   constructor(
     private userService: UserService,
     private responseUtil: ResponseUtil
-  ) {
-    this.userService = Container.get(UserService);
-    this.responseUtil = Container.get(ResponseUtil);
-  }
+  ) {}
 
   @Get("/")
   async getAllUsers() {
